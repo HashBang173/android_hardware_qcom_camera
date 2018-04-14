@@ -830,8 +830,7 @@ QCameraParameters::QCameraParameters()
       m_bHDRModeSensor(true),
       mOfflineRAW(false),
       m_bTruePortraitOn(false),
-      mCds_mode(CAM_CDS_MODE_OFF),
-      mFocusState(CAM_AF_SCANNING)
+      mCds_mode(CAM_CDS_MODE_OFF)
 {
     char value[PROPERTY_VALUE_MAX];
     // TODO: may move to parameter instead of sysprop
@@ -934,8 +933,7 @@ QCameraParameters::QCameraParameters(const String8 &params)
     mOfflineRAW(false),
     m_bTruePortraitOn(false),
     mCds_mode(CAM_CDS_MODE_OFF),
-    mParmEffect(CAM_EFFECT_MODE_OFF),
-    mFocusState(CAM_AF_SCANNING)
+    mParmEffect(CAM_EFFECT_MODE_OFF)
 {
     memset(&m_LiveSnapshotSize, 0, sizeof(m_LiveSnapshotSize));
     memset(&m_default_fps_range, 0, sizeof(m_default_fps_range));
@@ -8440,10 +8438,6 @@ int32_t QCameraParameters::updateFlash(bool commitSettings)
     }
 
     if (value != mFlashDaemonValue) {
-        if (isAFRunning()) {
-            CDBG("%s: AF is running, cancel AF before changing flash mode ", __func__);
-            m_pCamOpsTbl->ops->cancel_auto_focus(m_pCamOpsTbl->camera_handle);
-        }
         CDBG("%s: Setting Flash value %d", __func__, value);
         if (ADD_SET_PARAM_ENTRY_TO_BATCH(m_pParamBuf, CAM_INTF_PARM_LED_MODE, value)) {
             ALOGE("%s:Failed to set led mode", __func__);
@@ -12140,25 +12134,5 @@ int32_t QCameraParameters::setCDSMode(int32_t cds_mode, bool initCommit)
 
     return rc;
 }
-
-/*===========================================================================
- * FUNCTION   : isAFRunning
- *
- * DESCRIPTION: if AF is in progress while in Auto/Macro focus modes
- *
- * PARAMETERS : none
- *
- * RETURN     : true: AF in progress
- *              false: AF not in progress
- *==========================================================================*/
-bool QCameraParameters::isAFRunning()
-{
-    bool isAFInProgress = ((mFocusState == CAM_AF_SCANNING) &&
-            ((mFocusMode == CAM_FOCUS_MODE_AUTO) ||
-            (mFocusMode == CAM_FOCUS_MODE_MACRO)));
-
-    return isAFInProgress;
-}
-
 
 }; // namespace qcamera
