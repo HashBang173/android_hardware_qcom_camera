@@ -860,7 +860,6 @@ QCameraParameters::QCameraParameters()
     mCurPPCount = 0;
     mBufBatchCnt = 0;
     mRotation = 0;
-    mJpegRotation = 0;
 }
 
 /*===========================================================================
@@ -944,7 +943,6 @@ QCameraParameters::QCameraParameters(const String8 &params)
     mParmZoomLevel = 0;
     mCurPPCount = 0;
     mRotation = 0;
-    mJpegRotation = 0;
 }
 
 /*===========================================================================
@@ -9394,15 +9392,15 @@ uint32_t QCameraParameters::getJpegQuality()
 }
 
 /*===========================================================================
- * FUNCTION   : getRotation
+ * FUNCTION   : getJpegRotation
  *
- * DESCRIPTION: get application configured rotation
+ * DESCRIPTION: get jpeg rotation value
  *
  * PARAMETERS : none
  *
- * RETURN     : rotation value
+ * RETURN     : jpeg rotation value
  *==========================================================================*/
-uint32_t QCameraParameters::getRotation() {
+uint32_t QCameraParameters::getJpegRotation() {
     int rotation = 0;
 
     //If exif rotation is set, do not rotate captured image
@@ -9413,22 +9411,6 @@ uint32_t QCameraParameters::getRotation() {
         }
     }
     return (uint32_t)rotation;
-}
-
-/*===========================================================================
- * FUNCTION   : setJpegRotation
- *
- * DESCRIPTION: set jpeg rotation value configured internally
- *
- * PARAMETERS : none
- *
- * RETURN     : jpeg rotation value
- *==========================================================================*/
-void QCameraParameters::setJpegRotation(int rotation) {
-    if (rotation == 0 || rotation == 90 ||
-            rotation == 180 || rotation == 270) {
-        mJpegRotation = (uint32_t)rotation;
-    }
 }
 
 /*===========================================================================
